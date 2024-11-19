@@ -39,6 +39,8 @@
             this.txtBusca = new System.Windows.Forms.TextBox();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.lsvLista = new System.Windows.Forms.ListView();
+            this.btnDeletar = new System.Windows.Forms.Button();
+            this.txtDelete = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label1
@@ -134,11 +136,30 @@
             this.lsvLista.TabIndex = 10;
             this.lsvLista.UseCompatibleStateImageBehavior = false;
             // 
+            // btnDeletar
+            // 
+            this.btnDeletar.Location = new System.Drawing.Point(490, 181);
+            this.btnDeletar.Name = "btnDeletar";
+            this.btnDeletar.Size = new System.Drawing.Size(75, 23);
+            this.btnDeletar.TabIndex = 11;
+            this.btnDeletar.Text = "Deletar";
+            this.btnDeletar.UseVisualStyleBackColor = true;
+            this.btnDeletar.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // txtDelete
+            // 
+            this.txtDelete.Location = new System.Drawing.Point(288, 181);
+            this.txtDelete.Name = "txtDelete";
+            this.txtDelete.Size = new System.Drawing.Size(196, 20);
+            this.txtDelete.TabIndex = 12;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(663, 247);
+            this.Controls.Add(this.txtDelete);
+            this.Controls.Add(this.btnDeletar);
             this.Controls.Add(this.lsvLista);
             this.Controls.Add(this.btnBuscar);
             this.Controls.Add(this.txtBusca);
@@ -170,6 +191,8 @@
         private System.Windows.Forms.TextBox txtBusca;
         private System.Windows.Forms.Button btnBuscar;
         private System.Windows.Forms.ListView lsvLista;
+        private System.Windows.Forms.Button btnDeletar;
+        private System.Windows.Forms.TextBox txtDelete;
     }
 }
 

@@ -96,7 +96,7 @@ namespace uc9_MySQL1
 
                 while (reader.Read())
                 {
-
+                    //percorre toda a tabela para achar o oque esta procurando
                     string[] row =
                     {
                         reader.GetValue(0).ToString(),
@@ -118,6 +118,64 @@ namespace uc9_MySQL1
             {
                 MessageBox.Show(ex.Message);
                
+            }
+            finally
+            {
+                Connection.Close();
+            }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string q;
+
+                q = "'%" + txtDelete + "%'";
+
+                MessageBox.Show(q);
+
+                //criar conexao MySQL
+                Connection = new MySqlConnection(data_source);
+
+                string sql = "DELETE " +
+                             "FROM contato " +
+                             "WHERE nome LIKE " + q + "OR email LIKE" + q;
+
+                Connection.Open();
+
+                MessageBox.Show(sql);
+
+                //executar comando
+                MySqlCommand comando = new MySqlCommand(sql, Connection);
+
+                MySqlDataReader reader = comando.ExecuteReader();
+
+                lsvLista.Items.Clear();
+
+                while (reader.Read())
+                {
+                    //percorre toda a tabela para achar o oque esta procurando
+                    string[] row =
+                    {
+                        reader.GetValue(0).ToString(),
+                        reader.GetString(1),
+                        reader.GetString(2),
+                        reader.GetString(3)
+                    };
+
+                    var linha_listview = new ListViewItem(row);
+
+
+                    lsvLista.Items.Add(linha_listview);
+                }
+
+                MessageBox.Show("Deu certo de novo!!!");
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
             finally
             {
