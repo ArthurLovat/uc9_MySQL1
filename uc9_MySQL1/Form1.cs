@@ -16,7 +16,7 @@ namespace uc9_MySQL1
 {
     public partial class Form1 : Form
     {
-        private MySqlConnection Connection;
+        private MySqlConnection Conecao;
         private string data_source = "datasource=localhost;username=root;password=root;database=db_agenda";
         public Form1()
         {
@@ -26,6 +26,7 @@ namespace uc9_MySQL1
             lsvLista.LabelEdit = true;
             lsvLista.AllowColumnReorder = true;
             lsvLista.GridLines = true;
+            
 
             lsvLista.Columns.Add("ID", 30, HorizontalAlignment.Left);
             lsvLista.Columns.Add("Nome", 150, HorizontalAlignment.Left);
@@ -40,31 +41,39 @@ namespace uc9_MySQL1
                 
                 
                 //criar conexao MySql
-                Connection = new MySqlConnection(data_source);
+                Conecao = new MySqlConnection(data_source);
+
+                MySqlCommand cmd = new MySqlCommand();
+
+                cmd.Connection = Conecao;
+
+                Conecao.Open();
+
+                cmd.Parameters.AddWithValue("@NOME", txtNome.Text);
+                cmd.Parameters.AddWithValue("@EMAIL", txtEmail.Text);
+                cmd.Parameters.AddWithValue("@TELEFONE", txtTelefone.Text);
 
                 //execultar comando insert
-                string sql = "INSERT INTO contato (nome, email, telefone) " +
-                "VALUES('" + txtNome.Text + "','" + txtEmail.Text + "', '" + txtTelefone.Text + "')";
+                cmd.Connection = Conecao;
+                cmd.CommandText = "INSERT INTO contato(nome, email, telefone)" +
+                                  "VALUES " +
+                                  "(@NOME, @EMAIL, @TELEFONE)";
+                
+                cmd.Prepare();
 
-                //exibir o comando inserir dados
-                MessageBox.Show(sql);
-                MySqlCommand comando = new MySqlCommand(sql, Connection);
-
-                Connection.Open();
-
-                comando.ExecuteReader();
+                cmd.ExecuteNonQuery();
 
                 MessageBox.Show("Foi!");
 
             }
-            catch (Exception ex)
+            catch (MySql.Data.MySqlClient.MySqlException ex)
             {
-                MessageBox.Show("Erro: ", ex.Message);
-               
+                MessageBox.Show("Error " + ex.Number + " has occurred: " + ex.Message,
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             finally
             {
-                Connection.Close();
+                Conecao.Close();
             }
         }
 
@@ -77,18 +86,18 @@ namespace uc9_MySQL1
                 MessageBox.Show(q);
 
                 //criar conexao MySQL
-                Connection = new MySqlConnection(data_source);
+                Conecao = new MySqlConnection(data_source);
 
                 string sql = "SELECT * " +
                              "FROM contato " +
                              "WHERE nome LIKE " + q + "OR email LIKE" + q;
 
-                Connection.Open();
+                Conecao.Open();
 
                 MessageBox.Show(sql);
 
                 //executar comando
-                MySqlCommand comando = new MySqlCommand(sql, Connection);
+                MySqlCommand comando = new MySqlCommand(sql, Conecao);
 
                 MySqlDataReader reader = comando.ExecuteReader();
                         
@@ -121,7 +130,7 @@ namespace uc9_MySQL1
             }
             finally
             {
-                Connection.Close();
+                Conecao.Close();
             }
         }
 
@@ -136,18 +145,18 @@ namespace uc9_MySQL1
                 MessageBox.Show(q);
 
                 //criar conexao MySQL
-                Connection = new MySqlConnection(data_source);
+                Conecao = new MySqlConnection(data_source);
 
                 string sql = "DELETE " +
                              "FROM contato " +
                              "WHERE nome LIKE " + q + "OR email LIKE" + q;
 
-                Connection.Open();
+                Conecao.Open();
 
                 MessageBox.Show(sql);
 
                 //executar comando
-                MySqlCommand comando = new MySqlCommand(sql, Connection);
+                MySqlCommand comando = new MySqlCommand(sql, Conecao);
 
                 MySqlDataReader reader = comando.ExecuteReader();
 
@@ -179,7 +188,7 @@ namespace uc9_MySQL1
             }
             finally
             {
-                Connection.Close();
+                Conecao.Close();
             }
         }
     }
