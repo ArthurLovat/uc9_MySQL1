@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 using MySql.Data.MySqlClient;
 using Org.BouncyCastle.Asn1.Icao;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+//using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace uc9_MySQL1
 {
@@ -18,6 +18,7 @@ namespace uc9_MySQL1
     {
         private MySqlConnection Conecao;
         private string data_source = "datasource=localhost;username=root;password=root;database=db_agenda";
+        private int? id_Contato = null;
         public Form1()
         {
             InitializeComponent();
@@ -31,6 +32,7 @@ namespace uc9_MySQL1
             lsvLista.Columns.Add("ID", 30, HorizontalAlignment.Left);
             lsvLista.Columns.Add("Nome", 150, HorizontalAlignment.Left);
             lsvLista.Columns.Add("Telefone", 150, HorizontalAlignment.Left);
+            lsvLista.Columns.Add("Email", 150, HorizontalAlignment.Left);
 
         }
 
@@ -49,21 +51,40 @@ namespace uc9_MySQL1
 
                 Conecao.Open();
 
+                cmd.Parameters.AddWithValue("@ID", id_Contato);
                 cmd.Parameters.AddWithValue("@NOME", txtNome.Text);
                 cmd.Parameters.AddWithValue("@EMAIL", txtEmail.Text);
                 cmd.Parameters.AddWithValue("@TELEFONE", txtTelefone.Text);
 
+                if (id_Contato == null)
+                {
+                    cmd.CommandText = "INSERT INTO contato (nome, email, telefone)" + "VALUES " + "(@NOME, @EMAIL, @TELEFONE)";
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+
+                    MessageBox.Show("Id foi!");
+                }
+                else
+                {
+                    cmd.CommandText = "UPDATE contato SET nome=@NOME, email=@EMAIL, telefone=@TELEFONE WHERE id=@ID";
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+
+                    MessageBox.Show("Sucesso!",
+                        "Contato atualizado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
                 //execultar comando insert
-                cmd.Connection = Conecao;
-                cmd.CommandText = "INSERT INTO contato(nome, email, telefone)" +
-                                  "VALUES " +
-                                  "(@NOME, @EMAIL, @TELEFONE)";
+                //cmd.Connection = Conecao;
+                //cmd.CommandText = "INSERT INTO contato(nome, email, telefone)" +
+                //                  "VALUES " +
+                //                  "(@NOME, @EMAIL, @TELEFONE)";
                 
-                cmd.Prepare();
+                //cmd.Prepare();
 
-                cmd.ExecuteNonQuery();
+                //cmd.ExecuteNonQuery();
 
-                MessageBox.Show("Foi!");
+                //MessageBox.Show("Foi!");
 
             }
             catch (MySql.Data.MySqlClient.MySqlException ex)
@@ -189,6 +210,20 @@ namespace uc9_MySQL1
             finally
             {
                 Conecao.Close();
+            }
+        }
+
+        private void lsvLista_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            ListView.SelectedListViewItemCollection items_sel = lsvLista.SelectedItems;
+
+            foreach (ListViewItem item in items_sel)
+            {
+                //id_Contato = Convert.ToInt32(item.SubItems[0].Text;
+
+                txtNome.Text = item.SubItems[1].Text;
+                txtEmail.Text = item.SubItems[2].Text;
+                txtTelefone.Text = item.SubItems[3].Text;
             }
         }
     }

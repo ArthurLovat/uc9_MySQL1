@@ -135,6 +135,7 @@
             this.lsvLista.Size = new System.Drawing.Size(277, 90);
             this.lsvLista.TabIndex = 10;
             this.lsvLista.UseCompatibleStateImageBehavior = false;
+            this.lsvLista.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.lsvLista_ItemSelectionChanged);
             // 
             // btnDeletar
             // 
