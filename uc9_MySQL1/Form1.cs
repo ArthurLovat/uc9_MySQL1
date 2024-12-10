@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MySql.Data.MySqlClient;
+using System;
 using System.Windows.Forms;
-
-using MySql.Data.MySqlClient;
-using Org.BouncyCastle.Asn1.Icao;
 //using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace uc9_MySQL1
@@ -19,6 +10,7 @@ namespace uc9_MySQL1
         private MySqlConnection Conecao;
         private string data_source = "datasource=localhost;username=root;password=root;database=db_agenda";
         private int? id_Contato = null;
+        
         public Form1()
         {
             InitializeComponent();
@@ -27,7 +19,7 @@ namespace uc9_MySQL1
             lsvLista.LabelEdit = true;
             lsvLista.AllowColumnReorder = true;
             lsvLista.GridLines = true;
-            
+
 
             lsvLista.Columns.Add("ID", 30, HorizontalAlignment.Left);
             lsvLista.Columns.Add("Nome", 150, HorizontalAlignment.Left);
@@ -40,8 +32,8 @@ namespace uc9_MySQL1
         {
             try
             {
-                
-                
+
+
                 //criar conexao MySql
                 Conecao = new MySqlConnection(data_source);
 
@@ -79,7 +71,7 @@ namespace uc9_MySQL1
                 //cmd.CommandText = "INSERT INTO contato(nome, email, telefone)" +
                 //                  "VALUES " +
                 //                  "(@NOME, @EMAIL, @TELEFONE)";
-                
+
                 //cmd.Prepare();
 
                 //cmd.ExecuteNonQuery();
@@ -103,7 +95,7 @@ namespace uc9_MySQL1
             try
             {
                 string q = "'%" + txtBusca.Text + "%'";
-                
+
                 MessageBox.Show(q);
 
                 //criar conexao MySQL
@@ -121,7 +113,7 @@ namespace uc9_MySQL1
                 MySqlCommand comando = new MySqlCommand(sql, Conecao);
 
                 MySqlDataReader reader = comando.ExecuteReader();
-                        
+
                 lsvLista.Items.Clear();
 
                 while (reader.Read())
@@ -141,13 +133,13 @@ namespace uc9_MySQL1
                     lsvLista.Items.Add(linha_listview);
                 }
 
-            MessageBox.Show("Deu certo de novo!!!");
+                MessageBox.Show("Deu certo de novo!!!");
 
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
-               
+
             }
             finally
             {
@@ -219,12 +211,148 @@ namespace uc9_MySQL1
 
             foreach (ListViewItem item in items_sel)
             {
-                //id_Contato = Convert.ToInt32(item.SubItems[0].Text;
+                id_Contato = Convert.ToInt32(item.SubItems[0].Text);
 
                 txtNome.Text = item.SubItems[1].Text;
                 txtEmail.Text = item.SubItems[2].Text;
                 txtTelefone.Text = item.SubItems[3].Text;
             }
+        }
+
+        private void toolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DialogResult conf = MessageBox.Show("Ola", "Tem Certeza?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (conf == DialogResult.Yes)
+                {
+                    //excluir no bd
+
+                    Conecao = new MySqlConnection(data_source);
+                    Conecao.Open();
+
+                    MySqlCommand cmd = new MySqlCommand();
+
+                    cmd.Connection = Conecao;
+                    cmd.Parameters.AddWithValue("@ID", id_Contato);
+                    cmd.CommandText = "DELETE FROM contato WHERE id=@id ";
+                    cmd.Prepare();
+                    cmd.ExecuteNonQuery();
+                    MessageBox.Show("Excluido",
+                                    "Certeza",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                }
+
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Erro " + ex.Number + " ocoreu: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocorreu: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnDeletarDois_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                DialogResult conf = MessageBox.Show("Ola", "Tem Certeza?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (conf == DialogResult.Yes)
+                {
+                    //excluir no bd
+
+                    Conecao = new MySqlConnection(data_source);
+                    Conecao.Open();
+
+                    MySqlCommand cmd = new MySqlCommand();
+                    if (lsvLista.SelectedItems.Count > 0)
+                    {
+                        // Obter o ID da primeira coluna
+                        string id = lsvLista.SelectedItems[0].Text;
+                        MessageBox.Show($"ID Selecionado: {id}");
+                        cmd.Connection = Conecao;
+                        //cmd.Parameters.AddWithValue("@ID", id_Contato);
+                        cmd.CommandText = "DELETE FROM contato WHERE id=" + id;
+                        cmd.Prepare();
+                        cmd.ExecuteNonQuery();
+                        MessageBox.Show("Excluido",
+                                        "Certeza",
+                                        MessageBoxButtons.OK,
+                                        MessageBoxIcon.Information);
+
+                    }
+                    else
+                    {
+                        MessageBox.Show("Selecione um item da lista primeiro.");
+                    }
+
+
+                }
+            }
+            catch (MySqlException ex)
+            {
+                MessageBox.Show("Erro " + ex.Number + " ocoreu: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Ocorreu: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Conecao.Close();
+            }
+        }
+        private void AtualizarList()
+        {
+            try
+            {
+                //criar conexao MySQL
+                Conecao = new MySqlConnection(data_source);
+
+                string sql = "SELECT * " +
+                             "FROM contato ";
+
+                Conecao.Open();
+                MessageBox.Show(sql);
+
+                //executar comando
+                MySqlCommand comando = new MySqlCommand(sql, Conecao);
+
+                MySqlDataReader reader = comando.ExecuteReader();
+
+                lsvLista.Items.Clear();
+
+                while (reader.Read())
+                {
+                    // Cria um item para cada linha retornada do banco
+                    ListViewItem item = new ListViewItem(reader["Id"].ToString());
+                    item.SubItems.Add(reader["Nome"].ToString());
+                    item.SubItems.Add(reader["Telefone"].ToString());
+
+                    // Adiciona o item ao ListView
+                    lsvLista.Items.Add(item);
+
+                }
+                MessageBox.Show("Deu certo atualização!!!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+
+            }
+            finally
+            {
+                Conecao.Close();
+            }
+        }
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+            AtualizarList();
         }
     }
 }

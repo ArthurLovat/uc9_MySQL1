@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -39,8 +40,13 @@
             this.txtBusca = new System.Windows.Forms.TextBox();
             this.btnBuscar = new System.Windows.Forms.Button();
             this.lsvLista = new System.Windows.Forms.ListView();
+            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.btnDeletar = new System.Windows.Forms.Button();
             this.txtDelete = new System.Windows.Forms.TextBox();
+            this.btnDeletarDois = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.contextMenuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -129,6 +135,7 @@
             // 
             // lsvLista
             // 
+            this.lsvLista.ContextMenuStrip = this.contextMenuStrip1;
             this.lsvLista.HideSelection = false;
             this.lsvLista.Location = new System.Drawing.Point(288, 82);
             this.lsvLista.Name = "lsvLista";
@@ -136,6 +143,20 @@
             this.lsvLista.TabIndex = 10;
             this.lsvLista.UseCompatibleStateImageBehavior = false;
             this.lsvLista.ItemSelectionChanged += new System.Windows.Forms.ListViewItemSelectionChangedEventHandler(this.lsvLista_ItemSelectionChanged);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1});
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(110, 26);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(109, 22);
+            this.toolStripMenuItem1.Text = "Excluir";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
             // 
             // btnDeletar
             // 
@@ -154,11 +175,30 @@
             this.txtDelete.Size = new System.Drawing.Size(196, 20);
             this.txtDelete.TabIndex = 12;
             // 
+            // btnDeletarDois
+            // 
+            this.btnDeletarDois.Location = new System.Drawing.Point(288, 234);
+            this.btnDeletarDois.Name = "btnDeletarDois";
+            this.btnDeletarDois.Size = new System.Drawing.Size(277, 23);
+            this.btnDeletarDois.TabIndex = 14;
+            this.btnDeletarDois.Text = "DeletarDois";
+            this.btnDeletarDois.UseVisualStyleBackColor = true;
+            this.btnDeletarDois.Click += new System.EventHandler(this.btnDeletarDois_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(0, 0);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 1;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(663, 247);
+            this.ClientSize = new System.Drawing.Size(672, 386);
+            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnDeletarDois);
             this.Controls.Add(this.txtDelete);
             this.Controls.Add(this.btnDeletar);
             this.Controls.Add(this.lsvLista);
@@ -174,6 +214,8 @@
             this.Controls.Add(this.label1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load_1);
+            this.contextMenuStrip1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -194,6 +236,10 @@
         private System.Windows.Forms.ListView lsvLista;
         private System.Windows.Forms.Button btnDeletar;
         private System.Windows.Forms.TextBox txtDelete;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.Button btnDeletarDois;
+        private System.Windows.Forms.Button button1;
     }
 }
 
