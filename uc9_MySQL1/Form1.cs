@@ -87,6 +87,7 @@ namespace uc9_MySQL1
             finally
             {
                 Conecao.Close();
+                AtualizarList();
             }
         }
 
@@ -202,6 +203,7 @@ namespace uc9_MySQL1
             finally
             {
                 Conecao.Close();
+                AtualizarList();
             }
         }
 
@@ -254,6 +256,10 @@ namespace uc9_MySQL1
             {
                 MessageBox.Show("Ocorreu: " + ex.Message, "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            finally
+            {
+                AtualizarList();
+            }
         }
 
         private void btnDeletarDois_Click(object sender, EventArgs e)
@@ -305,6 +311,7 @@ namespace uc9_MySQL1
             finally
             {
                 Conecao.Close();
+                AtualizarList();
             }
         }
         private void AtualizarList()
@@ -333,7 +340,7 @@ namespace uc9_MySQL1
                     ListViewItem item = new ListViewItem(reader["Id"].ToString());
                     item.SubItems.Add(reader["Nome"].ToString());
                     item.SubItems.Add(reader["Telefone"].ToString());
-
+                     
                     // Adiciona o item ao ListView
                     lsvLista.Items.Add(item);
 
